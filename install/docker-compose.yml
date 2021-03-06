@@ -1,0 +1,85 @@
+services:
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+        container_name: elasticsearch
+        environment:
+            - discovery.type=single-node
+        ports:
+            - 9200:9200
+            - 9300:9300
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:7.11.1
+        container_name: kibana
+        environment:
+            SERVER_NAME: pizzasearch.org
+            ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+        ports:
+            - 5601:5601
+
+    mongo:
+        image: mongo
+        container_name: mongosearch
+        ports:
+            - 27018:27017
+
+    zookeeper:
+        image: confluentinc/cp-zookeeper:6.1.0
+        hostname: zookeeper
+        container_name: zookeeper
+        ports:
+            - "2181:2181"
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+
+    broker:
+        image: confluentinc/cp-kafka:6.1.0
+        hostname: broker
+        container_name: broker
+        depends_on:
+            - zookeeper
+        ports:
+            - "29092:29092"
+            - "9092:9092"
+            - "9101:9101"
+        environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+            KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+            KAFKA_JMX_PORT: 9101
+            KAFKA_JMX_HOSTNAME: broker
+
+    connect:
+        image: 'confluentinc/cp-kafka-connect:6.1.0'
+        hostname: connect
+        container_name: connect
+        ports:
+            - "28082:28082"
+        depends_on:
+            - zookeeper
+            - broker
+        environment:
+            CONNECT_BOOTSTRAP_SERVERS: broker:29092
+            CONNECT_REST_PORT: 28082 
+            CONNECT_GROUP_ID: "searcheg" 
+            CONNECT_CONFIG_STORAGE_TOPIC: searcheg-configs
+            CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+            CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+            CONNECT_OFFSET_STORAGE_TOPIC: searcheg-offsets
+            CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+            CONNECT_STATUS_STORAGE_TOPIC: searcheg-status
+            CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+            CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+            CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+            CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+            CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+            CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
+            CONNECT_PLUGIN_PATH: /usr/local/share/kafka/plugins
