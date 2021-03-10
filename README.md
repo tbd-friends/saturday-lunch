@@ -15,8 +15,8 @@ curl --request POST \
   --url http://localhost:28082/connectors \
   --header 'Content-Type: application/json' \
   --data '{
-	"name": "sink-mongodb-pizzas",
-	"config": {
+    "name": "sink-mongodb-pizzas",
+    "config": {
         "tasks.max":1,
         "connection.uri": "mongodb://mongosearch:27017",
         "connector.class":"com.mongodb.kafka.connect.MongoSinkConnector",
@@ -45,7 +45,7 @@ curl --request POST \
             "max.buffered.records": "20001",
             "schema.ignore": "true",
             "value.converter.schemas.enable": "false"
-		}
+    }
 }'
 ```
 
@@ -53,7 +53,7 @@ Now, run the registration application, and;
 
 
 ```
-curl -X POST "http://localhost:5000/Pizza" -H  "accept: */*" -H  "Content-Type: application/json" -d "{\"name\":\"Pizza!\",\"ingredients\":[{\"name\":\"cheese\",\"quantity\":1}],\"price\":1.99}"
+curl -X POST "http://localhost:5000/Pizza" -H  "accept: */*" -H  "Content-Type: application/json" -d '{\"name\":\"Pizza!\",\"ingredients\":[{\"name\":\"cheese\",\"quantity\":1}],\"price\":1.99}'
 ```
 
 You should be able to navigate to http://localhost:5601 and add an index pattern for pizzas, then be able to search pizzas
