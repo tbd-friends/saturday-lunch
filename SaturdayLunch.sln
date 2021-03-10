@@ -8,7 +8,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Install", "Install", "{AC91
 		install\docker-compose.yml = install\docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "registration", "src\apis\registration\registration.csproj", "{42767F07-5CF7-41BD-8953-023D57A4C639}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "registration", "src\apis\registration\registration.csproj", "{42767F07-5CF7-41BD-8953-023D57A4C639}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4AA9373-911E-400E-B8DA-F7068FF717C5}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
