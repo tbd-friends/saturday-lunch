@@ -22,6 +22,7 @@ curl --request POST \
         "connector.class":"com.mongodb.kafka.connect.MongoSinkConnector",
         "key.converter":"org.apache.kafka.connect.storage.StringConverter",
         "value.converter":"org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
         "database":"PizzaStore",
         "collection":"pizzas",
         "topics": "pizzas"
