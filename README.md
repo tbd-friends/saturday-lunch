@@ -1,4 +1,4 @@
-# saturday-lunch
+# Saturday Lunch
 
 A project to help understand more about how Kafka, ElasticSearch, Mongo and
 an application can all be friends
@@ -9,7 +9,7 @@ docker compose up -d
 
 When that's started, use your favorite REST Client to execute the following statements;
 
-#Add MongoDB Sink
+#### Add MongoDB Sink
 ```
 curl --request POST \
   --url http://localhost:28082/connectors \
@@ -29,7 +29,7 @@ curl --request POST \
 }'
 ```
 
-#Add ElasticSearch Sink
+#### Add ElasticSearch Sink
 ```
 curl --request POST \
   --url http://localhost:28082/connectors \
@@ -50,7 +50,6 @@ curl --request POST \
 ```
 
 Now, run the registration application, and;
-
 
 ```
 curl -X POST "http://localhost:5000/Pizza" -H  "accept: */*" -H  "Content-Type: application/json" -d '{\"name\":\"Pizza!\",\"ingredients\":[{\"name\":\"cheese\",\"quantity\":1}],\"price\":1.99}'
